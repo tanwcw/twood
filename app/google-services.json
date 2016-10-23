@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "131315682273",
+    "firebase_url": "https://twood-42c8a.firebaseio.com",
+    "project_id": "twood-42c8a",
+    "storage_bucket": "twood-42c8a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:131315682273:android:ba599f722a7a0016",
+        "android_client_info": {
+          "package_name": "homefulfriends.twood"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "131315682273-6qt0uec9ntrqrikr83krcvp468dv80g3.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "homefulfriends.twood",
+            "certificate_hash": "E3CB0CA434E9722D3FBA3B303B720E2C51F4FE5F"
+          }
+        },
+        {
+          "client_id": "131315682273-u5r0v8rj7rag74i3tu42tpbknv8sibvs.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAMzKdfzBfD_iTQdLHmivHprvpLRp879ho"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "131315682273-u5r0v8rj7rag74i3tu42tpbknv8sibvs.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

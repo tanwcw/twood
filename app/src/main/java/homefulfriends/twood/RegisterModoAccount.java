@@ -33,11 +33,10 @@ import static com.auth0.jwt.internal.org.bouncycastle.asn1.ua.DSTU4145NamedCurve
 
 public class RegisterModoAccount {
 
-    public static String userRegister() throws InterruptedException, ExecutionException {
+    public static String userRegister(String phone, String fname, String lname, String email) throws InterruptedException, ExecutionException {
 
-        postSender ps = new postSender();
+        postSender ps = new postSender(phone, fname, lname, email);
         return ps.execute().get();
-
         //Create connection
 
 //            Scanner scanner = new Scanner(response);
@@ -48,7 +47,18 @@ public class RegisterModoAccount {
     }
 
     private static class postSender extends AsyncTask<String, Void, String> {
+        public postSender(String phone, String fname, String lname, String email) {
+            super();
+            this.phone = phone;
+            this.fname = fname;
+            this.lname = lname;
+            this.email = email;
+        }
 
+        String phone;
+        String fname;
+        String lname;
+        String email;
         String result = "";
 
         @Override

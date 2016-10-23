@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">twood</string>
+
+    //Titles for appbar
+    <string name="title_home">Home</string>
+    <string name="title_transfer_money">Transfer</string>
+    <string name="title_settings">Settings</string>
+
 </resources>

@@ -7,8 +7,11 @@ import java.util.concurrent.ExecutionException;
  */
 
 public class InterestTransfer {
-    public String sendMoney(String sender_id, String sender_vault_id, String recipient_id, String recipient_vault_id, int amount, String type) throws InterruptedException, ExecutionException {
-        ParentToChild.postSender ps = new ParentToChild.postSender(sender_id, sender_vault_id, recipient_id, recipient_vault_id, amount, type);
-        return ps.execute().get();
-    }
+    String result = "";
+    public String sendInterest(String sender_id, String sender_vault_id, String recipient_id, String recipient_vault_id, int rate) throws InterruptedException, ExecutionException {
+        ParentToChild pc = new ParentToChild();
+        GetBalance gb = new GetBalance();
+        result = pc.sendMoney(sender_id, sender_vault_id, recipient_id, recipient_vault_id, Integer.parseInt(gb.getBalance(recipient_vault_id)) * rate, "bank");
+        return result;
+    }    
 }
