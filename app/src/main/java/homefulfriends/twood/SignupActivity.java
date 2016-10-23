@@ -21,6 +21,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.concurrent.ExecutionException;
+
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
@@ -77,7 +79,7 @@ public class SignupActivity extends AppCompatActivity {
         });
     }
 
-    public void signup() {
+    public void signup() throws InterruptedException, ExecutionException {
         Log.d(TAG, "Signup");
 
 
@@ -102,10 +104,12 @@ public class SignupActivity extends AppCompatActivity {
         String password = _passwordText.getText().toString();
         String reEnterPassword = _reEnterPasswordText.getText().toString();
 
+
+
         progressDialog.setMessage("Registering Please Wait...");
         progressDialog.show();
 
-        new signupRunnable(email, password, name, Integer.parseInt(mobile)).run();
+        new signupRunnable(email, password, name).run();
     }
 
     public void onSignupSuccess() {
@@ -183,14 +187,11 @@ public class SignupActivity extends AppCompatActivity {
         String email;
         String password;
         String name;
-        int phone;
 
-
-        public signupRunnable(String email, String password, String name, int phone ) {
+        public signupRunnable(String email, String password, String name) {
             this.email = email;
             this.password = password;
             this.name = name;
-            this.phone = phone;
         }
 
         public void run() {
@@ -204,17 +205,16 @@ public class SignupActivity extends AppCompatActivity {
                             //checking if success
                             if (task.isSuccessful()) {
                                 //display some message here
-                                firebaseAuth.signInWithEmailAndPassword(email,password);
+                                firebaseAuth.signInWithEmailAndPassword(email, password);
                                 FirebaseUser user = firebaseAuth.getCurrentUser();
-                                User newUser = new User(name, phone);
+                                User newUser = new User();
                                 databaseRef.child("Users").child(user.getUid()).setValue(newUser, new DatabaseReference.CompletionListener() {
                                     @Override
                                     public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
-                                        if(databaseError == null){
+                                        if (databaseError == null) {
                                             Toast.makeText(SignupActivity.this, "Successfully updated", Toast.LENGTH_LONG).show();
-                                        }
-                                        else{
-                                            System.out.println("Error: "+ databaseError);
+                                        } else {
+                                            System.out.println("Error: " + databaseError);
                                             Toast.makeText(SignupActivity.this, "Unsuccessful...", Toast.LENGTH_LONG).show();
                                         }
                                     }
@@ -258,5 +258,5 @@ public class SignupActivity extends AppCompatActivity {
 //                    }
 //                }
 //            });
-        }
     }
+}
