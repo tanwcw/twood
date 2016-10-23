@@ -105,7 +105,7 @@ public class SignupActivity extends AppCompatActivity {
         progressDialog.setMessage("Registering Please Wait...");
         progressDialog.show();
 
-        new signupRunnable(email, password, name ).run();
+        new signupRunnable(email, password, name, Integer.parseInt(mobile)).run();
     }
 
     public void onSignupSuccess() {
@@ -183,11 +183,14 @@ public class SignupActivity extends AppCompatActivity {
         String email;
         String password;
         String name;
+        int phone;
 
-        public signupRunnable(String email, String password, String name ) {
+
+        public signupRunnable(String email, String password, String name, int phone ) {
             this.email = email;
             this.password = password;
             this.name = name;
+            this.phone = phone;
         }
 
         public void run() {
@@ -203,7 +206,7 @@ public class SignupActivity extends AppCompatActivity {
                                 //display some message here
                                 firebaseAuth.signInWithEmailAndPassword(email,password);
                                 FirebaseUser user = firebaseAuth.getCurrentUser();
-                                User newUser = new User();
+                                User newUser = new User(name, phone);
                                 databaseRef.child("Users").child(user.getUid()).setValue(newUser, new DatabaseReference.CompletionListener() {
                                     @Override
                                     public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {

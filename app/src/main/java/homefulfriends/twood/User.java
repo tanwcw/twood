@@ -14,8 +14,9 @@ public class User {
 
     public User(){}
 
-    public User(String name){
+    public User(String name, int mobile){
         this.name = name;
+        this.mobile = mobile;
     }
 
     public User(int bankDetails){this.bankDetails = bankDetails;}

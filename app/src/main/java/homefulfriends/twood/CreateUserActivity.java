@@ -1,8 +1,9 @@
 package homefulfriends.twood;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -10,12 +11,13 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 
 public class CreateUserActivity extends AppCompatActivity implements View.OnClickListener{
@@ -25,7 +27,6 @@ public class CreateUserActivity extends AppCompatActivity implements View.OnClic
     private Button buttonLogout;
     private Button buttonSave;
 
-    private EditText editTextName;
     private EditText editTextBankDetails;
 
     private CheckBox checkBoxIsParent;
@@ -44,6 +45,10 @@ public class CreateUserActivity extends AppCompatActivity implements View.OnClic
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_user);
 
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle("Account Details");
+
         //initializing firebase authentication object
         firebaseAuth = FirebaseAuth.getInstance();
 
@@ -60,18 +65,14 @@ public class CreateUserActivity extends AppCompatActivity implements View.OnClic
         databaseReference = FirebaseDatabase.getInstance().getReference();
 
         //getting the view from xml
-        editTextName = (EditText) findViewById(R.id.editTextName);
         editTextBankDetails = (EditText) findViewById(R.id.editTextBankDetails);
         buttonSave = (Button) findViewById(R.id.buttonSave);
         buttonSave = (Button) findViewById(R.id.buttonSave);
-        textViewUserEmail = (TextView) findViewById(R.id.textViewUserEmail);
-        buttonLogout = (Button) findViewById(R.id.buttonLogout);
         checkBoxIsParent = (CheckBox) findViewById(R.id.checkBoxIsParent);
 
 
         //get current user
         currentUser = firebaseAuth.getCurrentUser();
-
 
         //adding listener to button
         buttonLogout.setOnClickListener(this);
@@ -80,48 +81,61 @@ public class CreateUserActivity extends AppCompatActivity implements View.OnClic
 
     private void saveUserInformation() {
         //Getting values from database
-        String name = editTextName.getText().toString().trim();
-        int bankDetails = Integer.parseInt(editTextBankDetails.getText().toString());
-        boolean isParent = checkBoxIsParent.isChecked();
+        final int bankDetails = Integer.parseInt(editTextBankDetails.getText().toString());
+        final boolean isParent = checkBoxIsParent.isChecked();
 
-
-        //creating a new user object
-        User user = new User(name, bankDetails, currentUser.getEmail(), isParent);
-
-        System.out.println(user.toString());
-        System.out.println(user.getName());
-        System.out.println(user.getBankDetails());
-        System.out.println(currentUser.getUid());
-
-        databaseReference.child("Users").child(currentUser.getUid()).setValue(user, new DatabaseReference.CompletionListener() {
+        //Retrive current user
+        databaseReference.child("Users").child(currentUser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
-                if(databaseError == null){
-                    Toast.makeText(CreateUserActivity.this, "Successfully updated", Toast.LENGTH_LONG).show();
-                }
-                else{
-                    System.out.println("Error: "+ databaseError);
-                    Toast.makeText(CreateUserActivity.this, "Unsuccessful...", Toast.LENGTH_LONG).show();
-                }
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                User user = dataSnapshot.getValue(User.class);
+                // adding values
+                user.setBankDetails(bankDetails);
+                user.setParent(isParent);
+
+                databaseReference.child("Users").child(currentUser.getUid()).setValue(user, new DatabaseReference.CompletionListener() {
+                    @Override
+                    public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+                        if(databaseError == null){
+                            Toast.makeText(CreateUserActivity.this, "Successfully updated", Toast.LENGTH_LONG).show();
+                        }
+                        else{
+                            System.out.println("Error: "+ databaseError);
+                            Toast.makeText(CreateUserActivity.this, "Unsuccessful...", Toast.LENGTH_LONG).show();
+                        }
+                    }
+                });
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
             }
         });
+
+
+
     }
 
     @Override
     public void onClick(View view) {
-        //if logout is pressed
-        if (view == buttonLogout) {
-            //logging out the user
-            firebaseAuth.signOut();
-            //closing activity
-            finish();
-            //starting login activity
-            startActivity(new Intent(this, LoginActivity.class));
-        }
+        saveUserInformation();
+        databaseReference.child("Users").child(currentUser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                User user = dataSnapshot.getValue(User.class);
+                if(user.getParent() == true){
+                    startActivity(new Intent(getBaseContext(),ParentMainActivity.class));
+                }
+                else{
+                    startActivity(new Intent(getBaseContext(),ChildMainActivity.class));
+                }
+            }
 
-        if(view == buttonSave){
-            saveUserInformation();
-        }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
 
+            }
+        });
     }
 }
