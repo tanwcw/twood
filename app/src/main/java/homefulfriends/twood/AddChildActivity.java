@@ -26,7 +26,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class AddChildActivity extends AppCompatActivity implements View.OnClickListener {
+public class AddChildActivity extends AppCompatActivity {
 
     //defining views
     private Button buttonAddChild;
@@ -77,13 +77,9 @@ public class AddChildActivity extends AppCompatActivity implements View.OnClickL
             startActivity(new Intent(this, LoginActivity.class));
         }
 
-        //attaching click listener
-        buttonAddChild.setOnClickListener(this);
-        buttonLogout.setOnClickListener(this);
-
     }
 
-    public void addChild() {
+    public void addChild(View v) {
         String childEmail = addChildEmail.getText().toString().trim();
         String parentEmail = currentUser.getEmail();
 
@@ -122,23 +118,9 @@ public class AddChildActivity extends AppCompatActivity implements View.OnClickL
             userParent.setChildKey(key);
             databaseReference.child("Users").child(currentUser.getUid()).setValue(userParent);
         } catch (Exception exception) {
-            System.out.println(exception.getMessage());
+            System.out.println(exception.getMessage()+"LOLOLOLOL");
         }
 
-    }
-
-
-    @Override
-    public void onClick(View view) {
-        if (view == buttonAddChild) {
-            addChild();
-            startActivity(new Intent(this, ParentMainActivity.class));
-        }
-
-        if (view == buttonLogout) {
-            finish();
-            startActivity(new Intent(this, LoginActivity.class));
-        }
     }
 }
 

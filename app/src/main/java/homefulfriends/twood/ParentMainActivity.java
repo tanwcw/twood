@@ -28,7 +28,7 @@ public class ParentMainActivity extends AppCompatActivity {
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle("Transfer money");
+        getSupportActionBar().setTitle("Home");
 
         //App Drawer
         PrimaryDrawerItem item1 = new PrimaryDrawerItem().withIdentifier(0).withName(R.string.drawer_item_home);
@@ -60,7 +60,7 @@ public class ParentMainActivity extends AppCompatActivity {
                             if (drawerItem.getIdentifier() == 1) {
                                 intent = new Intent(getBaseContext(), TransferActivity.class);
                             } else if (drawerItem.getIdentifier() == 2) {
-                                intent = new Intent(getBaseContext(), ManageChildActivity.class);
+                                intent = new Intent(getBaseContext(), AddChildActivity.class);
                             } else if (drawerItem.getIdentifier() == 3) {
                                 intent = new Intent(getBaseContext(), SettingsActivity.class);
                             } else if (drawerItem.getIdentifier() == 0) {

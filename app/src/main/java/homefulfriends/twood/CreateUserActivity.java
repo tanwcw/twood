@@ -67,7 +67,6 @@ public class CreateUserActivity extends AppCompatActivity implements View.OnClic
         //getting the view from xml
         editTextBankDetails = (EditText) findViewById(R.id.editTextBankDetails);
         buttonSave = (Button) findViewById(R.id.buttonSave);
-        buttonSave = (Button) findViewById(R.id.buttonSave);
         checkBoxIsParent = (CheckBox) findViewById(R.id.checkBoxIsParent);
 
 
@@ -75,7 +74,6 @@ public class CreateUserActivity extends AppCompatActivity implements View.OnClic
         currentUser = firebaseAuth.getCurrentUser();
 
         //adding listener to button
-        buttonLogout.setOnClickListener(this);
         buttonSave.setOnClickListener(this);
     }
 

@@ -14,6 +14,19 @@ public class User {
 
     public User(){}
 
+    public User(String name, int bankDetails, String email, Boolean isParent, String childKey, String modoId, String childCheckingVaultID, String childSavingVaultID, String parentVaultID, int mobile) {
+        this.name = name;
+        this.bankDetails = bankDetails;
+        this.email = email;
+        this.isParent = isParent;
+        this.childKey = childKey;
+        this.modoId = modoId;
+        this.childCheckingVaultID = childCheckingVaultID;
+        this.childSavingVaultID = childSavingVaultID;
+        this.parentVaultID = parentVaultID;
+        this.mobile = mobile;
+    }
+
     public User(String name, int mobile){
         this.name = name;
         this.mobile = mobile;
