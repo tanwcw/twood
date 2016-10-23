@@ -12,7 +12,11 @@
         android:windowSoftInputMode="stateHidden">
         <activity
             android:name=".ParentMainActivity"
-            android:label="@string/app_name"></activity>
+            android:label="@string/app_name">            <intent-filter>
+            <action android:name="android.intent.action.MAIN" />
+
+            <category android:name="android.intent.category.LAUNCHER" />
+        </intent-filter></activity>
         <activity
             android:name=".LoginActivity"
             android:theme="@style/AppTheme.Dark">
@@ -22,13 +26,11 @@
             android:name=".SignupActivity"
             android:theme="@style/AppTheme.Dark" />
         <activity android:name=".ChildMainActivity"></activity>
-        <activity android:name=".CreateUserActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+        <activity android:name=".CreateUserActivity" />
+        <activity android:name=".TransferActivity" />
+        <activity android:name=".SettingsActivity" />
+        <activity android:name=".ParentChildActivity" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
     </application>
 
 </manifest>
