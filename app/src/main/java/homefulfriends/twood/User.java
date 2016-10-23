@@ -1,4 +1,4 @@
-package com.homeful.jayne.pearapp;
+package homefulfriends.twood;
 
 
 public class User {

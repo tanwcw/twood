@@ -1,4 +1,4 @@
-package com.homeful.jayne.pearapp;
+package homefulfriends.twood;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
