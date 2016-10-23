@@ -4,13 +4,11 @@ package homefulfriends.twood;
  * Created by jayne on 10/22/16.
  */
 
-public class ParentChild {
+public class ParentChildActivity {
     private String parentEmail;
     private String childEmail;
 
-    public ParentChild(){};
-
-    public ParentChild(String parentEmail, String childEmail) {
+    public ParentChildActivity(String parentEmail, String childEmail) {
         this.parentEmail = parentEmail;
         this.childEmail = childEmail;
     }

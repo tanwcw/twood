@@ -26,6 +26,12 @@ dependencies {
     compile 'com.jakewharton:butterknife:7.0.1'
     compile 'com.rengwuxian.materialedittext:library:2.1.4'
     compile 'com.android.support:design:24.1.1'
+    compile 'com.squareup.picasso:picasso:2.5.2'
+    compile('com.mikepenz:materialdrawer:5.6.0@aar') {
+        transitive = true
+    }
+    compile 'com.mikepenz:google-material-typeface:2.2.0.3.original@aar'
+    compile 'com.mikepenz:fontawesome-typeface:4.6.0.3@aar'
 
     //Import by JY
     compile 'com.google.firebase:firebase-database:9.6.1'
