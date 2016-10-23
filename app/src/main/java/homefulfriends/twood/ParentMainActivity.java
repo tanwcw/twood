@@ -21,13 +21,16 @@ public class ParentMainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_parent_main);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle("Home");
+
+        //App Drawer
         PrimaryDrawerItem item1 = new PrimaryDrawerItem().withIdentifier(0).withName(R.string.drawer_item_home);
         SecondaryDrawerItem item2 = new SecondaryDrawerItem().withIdentifier(1).withName(R.string.drawer_item_transfer);
         SecondaryDrawerItem item3 = new SecondaryDrawerItem().withIdentifier(2).withName(R.string.drawer_item_see_child);
         SecondaryDrawerItem item4 = new SecondaryDrawerItem().withIdentifier(3).withName(R.string.drawer_item_settings);
 
-//create the drawer and remember the `Drawer` result object
-        Drawer result = new DrawerBuilder()
+       Drawer result = new DrawerBuilder()
                 .withActivity(this)
                 .withToolbar(toolbar)
                 .addDrawerItems(
@@ -46,7 +49,7 @@ public class ParentMainActivity extends AppCompatActivity {
                             if (drawerItem.getIdentifier() == 1) {
                                 intent = new Intent(getBaseContext(), TransferActivity.class);
                             } else if (drawerItem.getIdentifier() == 2) {
-                                intent = new Intent(getBaseContext(), ParentChildActivity.class);
+                                intent = new Intent(getBaseContext(), ManageChildActivity.class);
                             } else if (drawerItem.getIdentifier() == 3) {
                                 intent = new Intent(getBaseContext(), SettingsActivity.class);
                             } else if (drawerItem.getIdentifier() == 0) {
@@ -62,6 +65,5 @@ public class ParentMainActivity extends AppCompatActivity {
                     }
                 })
                 .build();
-
     }
 }
