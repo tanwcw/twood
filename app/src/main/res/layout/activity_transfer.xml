@@ -7,8 +7,7 @@
     android:layout_height="match_parent"
     tools:context="homefulfriends.twood.TransferActivity">
 
-    <include layout="@layout/toolbar"
-        android:id="@+id/include2" />
+    <include layout="@layout/toolbar"/>
 
     <TextView
         android:text="How much would you like to transfer to"
@@ -41,14 +40,6 @@
         android:id="@+id/child_name"
         android:textSize="36sp" />
 
-    <com.blackcat.currencyedittext.CurrencyEditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="35dp"
-        android:layout_below="@+id/child_name"
-        android:layout_alignEnd="@+id/child_name"
-        android:layout_alignStart="@+id/child_name" />
-
     <Button
         android:text="Transfer"
         android:layout_width="wrap_content"
@@ -56,6 +47,15 @@
         android:id="@+id/button2"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="27dp" />
+        android:layout_marginBottom="27dp"
+        android:onClick="button2click" />
+
+    <com.blackcat.currencyedittext.CurrencyEditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="35dp"
+        android:layout_below="@+id/child_name"
+        android:layout_alignStart="@+id/child_name"
+        android:id="@+id/currencyEditText2" />
 
 </RelativeLayout>
