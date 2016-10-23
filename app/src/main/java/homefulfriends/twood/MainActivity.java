@@ -17,8 +17,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         String result = null;
         try {
-//              AddCard ac = new AddCard();
-//              result = ac.addCardToModo(recipient_id,"4485660000000007");
+              AddCard ac = new AddCard();
+              result = ac.addCardToModo(recipient_id,"4485660000000007");
 
 //              result = RegisterModoAccount.userRegister();
 
@@ -30,8 +30,8 @@ public class MainActivity extends AppCompatActivity {
 //            GiftCardMerchant gm = new GiftCardMerchant();
 //            result = gm.findMerchantID("merchant");
 
-            GetBalance gb = new GetBalance();
-            result = gb.getBalance("04304850-6f6e-4377-9951-96147a91eced");
+//            GetBalance gb = new GetBalance();
+//            result = gb.getBalance("04304850-6f6e-4377-9951-96147a91eced");
 
         } catch (Exception e) {
             e.printStackTrace();
