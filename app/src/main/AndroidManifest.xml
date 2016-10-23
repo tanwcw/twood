@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="homefulfriends.twood">
+
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
@@ -14,13 +15,13 @@
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
- 
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
             android:name=".LoginActivity"
-            android:theme="@style/AppTheme.Dark"></activity>
+            android:theme="@style/AppTheme.Dark" />
         <activity
             android:name=".SignupActivity"
             android:theme="@style/AppTheme.Dark" />
@@ -29,7 +30,8 @@
         <activity android:name=".TransferActivity" />
         <activity android:name=".SettingsActivity" />
         <activity android:name=".ParentChildActivity" />
-        <activity android:name=".ManageChildActivity"></activity>
+        <activity android:name=".ManageChildActivity" />
+        <activity android:name=".TaskListActivity"></activity>
     </application>
 
 </manifest>

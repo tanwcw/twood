@@ -7,5 +7,6 @@
     tools:context="homefulfriends.twood.TransferActivity">
 
     <include layout="@layout/toolbar"/>
+
  
  </RelativeLayout>

@@ -186,7 +186,7 @@ public class SignupActivity extends AppCompatActivity {
         int phone;
 
 
-        public signupRunnable(String email, String password, String name, int phone ) {
+        public signupRunnable(String email, String password, String name, int phone) {
             this.email = email;
             this.password = password;
             this.name = name;
@@ -204,17 +204,16 @@ public class SignupActivity extends AppCompatActivity {
                             //checking if success
                             if (task.isSuccessful()) {
                                 //display some message here
-                                firebaseAuth.signInWithEmailAndPassword(email,password);
+                                firebaseAuth.signInWithEmailAndPassword(email, password);
                                 FirebaseUser user = firebaseAuth.getCurrentUser();
-                                User newUser = new User(name, phone);
+                                User newUser = new User(name, phone, email);
                                 databaseRef.child("Users").child(user.getUid()).setValue(newUser, new DatabaseReference.CompletionListener() {
                                     @Override
                                     public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
-                                        if(databaseError == null){
+                                        if (databaseError == null) {
                                             Toast.makeText(SignupActivity.this, "Successfully updated", Toast.LENGTH_LONG).show();
-                                        }
-                                        else{
-                                            System.out.println("Error: "+ databaseError);
+                                        } else {
+                                            System.out.println("Error: " + databaseError);
                                             Toast.makeText(SignupActivity.this, "Unsuccessful...", Toast.LENGTH_LONG).show();
                                         }
                                     }
@@ -258,5 +257,5 @@ public class SignupActivity extends AppCompatActivity {
 //                    }
 //                }
 //            });
-        }
     }
+}

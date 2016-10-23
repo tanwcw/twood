@@ -20,11 +20,10 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 
-public class CreateUserActivity extends AppCompatActivity implements View.OnClickListener{
+public class CreateUserActivity extends AppCompatActivity implements View.OnClickListener {
 
     //view objects
     private TextView textViewUserEmail;
-    private Button buttonLogout;
     private Button buttonSave;
 
     private EditText editTextBankDetails;
@@ -67,7 +66,6 @@ public class CreateUserActivity extends AppCompatActivity implements View.OnClic
         //getting the view from xml
         editTextBankDetails = (EditText) findViewById(R.id.editTextBankDetails);
         buttonSave = (Button) findViewById(R.id.buttonSave);
-        buttonSave = (Button) findViewById(R.id.buttonSave);
         checkBoxIsParent = (CheckBox) findViewById(R.id.checkBoxIsParent);
 
 
@@ -75,7 +73,6 @@ public class CreateUserActivity extends AppCompatActivity implements View.OnClic
         currentUser = firebaseAuth.getCurrentUser();
 
         //adding listener to button
-        buttonLogout.setOnClickListener(this);
         buttonSave.setOnClickListener(this);
     }
 
@@ -83,6 +80,7 @@ public class CreateUserActivity extends AppCompatActivity implements View.OnClic
         //Getting values from database
         final int bankDetails = Integer.parseInt(editTextBankDetails.getText().toString());
         final boolean isParent = checkBoxIsParent.isChecked();
+
 
         //Retrive current user
         databaseReference.child("Users").child(currentUser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -92,15 +90,34 @@ public class CreateUserActivity extends AppCompatActivity implements View.OnClic
                 // adding values
                 user.setBankDetails(bankDetails);
                 user.setParent(isParent);
+                String mobile = "" + user.getMobile();
+                String name = user.getName();
+                String email = user.getEmail();
+                RegisterModoAccount ra = new RegisterModoAccount();
+                try {
+                    String modoID = ra.userRegister(mobile, name, "Taylor", email);
+                    AddCard ad = new AddCard();
+                    String vaultID = ad.addCardToModo(modoID, "4485660000000007" , isParent);
+                    if (isParent) {
+                        user.setParentVaultID(vaultID);
+                    } else {
+                        user.setChildCheckingVaultID(vaultID);
+                        String vaultID2 = ad.addCardToModo(modoID, "5153641444444447", isParent);
+                        user.setChildCheckingVaultID(vaultID2);
+                    }
+                    user.setModoId(modoID);
+                } catch (Exception e) {
+                    System.out.println(e);
+                }
+
 
                 databaseReference.child("Users").child(currentUser.getUid()).setValue(user, new DatabaseReference.CompletionListener() {
                     @Override
                     public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
-                        if(databaseError == null){
+                        if (databaseError == null) {
                             Toast.makeText(CreateUserActivity.this, "Successfully updated", Toast.LENGTH_LONG).show();
-                        }
-                        else{
-                            System.out.println("Error: "+ databaseError);
+                        } else {
+                            System.out.println("Error: " + databaseError);
                             Toast.makeText(CreateUserActivity.this, "Unsuccessful...", Toast.LENGTH_LONG).show();
                         }
                     }
@@ -113,29 +130,36 @@ public class CreateUserActivity extends AppCompatActivity implements View.OnClic
             }
         });
 
+        if(isParent){
+            startActivity(new Intent(getBaseContext(), ParentMainActivity.class));
+        }
+        else{
+            startActivity(new Intent(getBaseContext(), ChildMainActivity.class));
+        }
 
 
     }
 
     @Override
     public void onClick(View view) {
-        saveUserInformation();
-        databaseReference.child("Users").child(currentUser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                User user = dataSnapshot.getValue(User.class);
-                if(user.getParent() == true){
-                    startActivity(new Intent(getBaseContext(),ParentMainActivity.class));
-                }
-                else{
-                    startActivity(new Intent(getBaseContext(),ChildMainActivity.class));
-                }
-            }
+            saveUserInformation();
+//            databaseReference.child("Users").child(currentUser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+//                @Override
+//                public void onDataChange(DataSnapshot dataSnapshot) {
+//                    User user = dataSnapshot.getValue(User.class);
+//                    System.out.println(user);
+//                    if (user.getParent()) {
+//                        startActivity(new Intent(getBaseContext(), ParentMainActivity.class));
+//                    } else {
+//                        startActivity(new Intent(getBaseContext(), ChildMainActivity.class));
+//                    }
+//                }
+//
+//                @Override
+//                public void onCancelled(DatabaseError databaseError) {
+//
+//                }
+//            });
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
     }
 }

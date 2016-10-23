@@ -3,32 +3,19 @@ package homefulfriends.twood;
 import android.os.AsyncTask;
 
 import com.auth0.jwt.JWTSigner;
-import com.auth0.jwt.JWTVerifier;
-import com.auth0.jwt.JWTVerifyException;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
-import java.io.DataOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.io.OutputStreamWriter;
-import java.lang.reflect.Array;
-import java.net.URL;
-import java.net.URLConnection;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Scanner;
 import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.HashMap;
 import java.util.concurrent.ExecutionException;
-import org.json.JSONArray;
-import static android.R.id.message;
-import static com.auth0.jwt.internal.org.bouncycastle.asn1.ua.DSTU4145NamedCurves.params;
 
 /**
  * Created by liao on 10/22/16.
@@ -36,14 +23,14 @@ import static com.auth0.jwt.internal.org.bouncycastle.asn1.ua.DSTU4145NamedCurve
 
 public class AddCard {
 
-    public String addCardToModo(String account_id, String card_number, String role) throws InterruptedException, ExecutionException {
+    public String addCardToModo(String account_id, String card_number, Boolean role) throws InterruptedException, ExecutionException {
 
         postSender ps = new postSender(account_id,card_number,role);
         return ps.execute().get();
     }
 
     private class postSender extends AsyncTask<String, Void, String> {
-        public postSender(String account_id, String card_number, String role) {
+        public postSender(String account_id, String card_number, Boolean role) {
             super();
             this.account_id = account_id;
             this.card_number = card_number;
@@ -53,7 +40,7 @@ public class AddCard {
         String result = "";
         String account_id;
         String card_number;
-        String role;
+        Boolean role;
 
         @Override
         protected String doInBackground(String[] params) {
@@ -91,7 +78,7 @@ public class AddCard {
 
 
                 JSONObject subRequest = new JSONObject();
-                if(role.equals("parent")) {
+                if(role.equals(true)) {
                     subRequest.put("vault_type", "OPEN_CARD");
                 }
                 else{

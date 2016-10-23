@@ -1,5 +1,7 @@
 package homefulfriends.twood;
 
+import java.util.HashMap;
+
 /**
  * Created by jayne on 10/22/16.
  */
@@ -7,10 +9,12 @@ package homefulfriends.twood;
 public class ParentChild {
     private String parentEmail;
     private String childEmail;
+    private HashMap<String, Integer> taskList;
 
     public ParentChild(String parentEmail, String childEmail) {
         this.parentEmail = parentEmail;
         this.childEmail = childEmail;
+
     }
 //
     public String getParentEmail() {
@@ -27,6 +31,14 @@ public class ParentChild {
 
     public void setChildEmail(String childEmail) {
         this.childEmail = childEmail;
+    }
+
+    public HashMap<String, Integer> getTaskList() {
+        return taskList;
+    }
+
+    public void setTaskList(HashMap<String, Integer> taskList) {
+        this.taskList = taskList;
     }
 
     @Override
