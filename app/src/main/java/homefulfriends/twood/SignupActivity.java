@@ -16,6 +16,10 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -25,14 +29,24 @@ public class SignupActivity extends AppCompatActivity {
 
     private FirebaseAuth firebaseAuth;
 
-    @Bind(R.id.input_name) EditText _nameText;
-    @Bind(R.id.input_address) EditText _addressText;
-    @Bind(R.id.input_email) EditText _emailText;
-    @Bind(R.id.input_mobile) EditText _mobileText;
-    @Bind(R.id.input_password) EditText _passwordText;
-    @Bind(R.id.input_reEnterPassword) EditText _reEnterPasswordText;
-    @Bind(R.id.btn_signup) Button _signupButton;
-    @Bind(R.id.link_login) TextView _loginLink;
+    private DatabaseReference databaseRef;
+
+    @Bind(R.id.input_name)
+    EditText _nameText;
+    @Bind(R.id.input_address)
+    EditText _addressText;
+    @Bind(R.id.input_email)
+    EditText _emailText;
+    @Bind(R.id.input_mobile)
+    EditText _mobileText;
+    @Bind(R.id.input_password)
+    EditText _passwordText;
+    @Bind(R.id.input_reEnterPassword)
+    EditText _reEnterPasswordText;
+    @Bind(R.id.btn_signup)
+    Button _signupButton;
+    @Bind(R.id.link_login)
+    TextView _loginLink;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -42,6 +56,7 @@ public class SignupActivity extends AppCompatActivity {
 
         //initializing firebase auth object - JY
         firebaseAuth = FirebaseAuth.getInstance();
+        databaseRef = FirebaseDatabase.getInstance().getReference();
 
         _signupButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -54,7 +69,7 @@ public class SignupActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Finish the registration screen and return to the Login activity
-                Intent intent = new Intent(getApplicationContext(),LoginActivity.class);
+                Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
                 startActivity(intent);
                 finish();
                 overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
@@ -65,6 +80,8 @@ public class SignupActivity extends AppCompatActivity {
     public void signup() {
         Log.d(TAG, "Signup");
 
+
+        //Sign Up F
         if (!validate()) {
             onSignupFailed();
             return;
@@ -88,7 +105,7 @@ public class SignupActivity extends AppCompatActivity {
         progressDialog.setMessage("Registering Please Wait...");
         progressDialog.show();
 
-        new signupRunnable(email,password).run();
+        new signupRunnable(email, password, name ).run();
     }
 
     public void onSignupSuccess() {
@@ -138,7 +155,7 @@ public class SignupActivity extends AppCompatActivity {
             _emailText.setError(null);
         }
 
-        if (mobile.isEmpty() || mobile.length()!=10) {
+        if (mobile.isEmpty() || mobile.length() != 10) {
             _mobileText.setError("Enter Valid Mobile Number");
             valid = false;
         } else {
@@ -165,9 +182,12 @@ public class SignupActivity extends AppCompatActivity {
     private class signupRunnable implements Runnable {
         String email;
         String password;
-        public signupRunnable(String email, String password){
-            this.email=email;
-            this.password=password;
+        String name;
+
+        public signupRunnable(String email, String password, String name ) {
+            this.email = email;
+            this.password = password;
+            this.name = name;
         }
 
         public void run() {
@@ -175,20 +195,65 @@ public class SignupActivity extends AppCompatActivity {
 
             //creating a new user
             firebaseAuth.createUserWithEmailAndPassword(email, password)
-                    .addOnCompleteListener( new OnCompleteListener<AuthResult>() {
+                    .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             //checking if success
                             if (task.isSuccessful()) {
                                 //display some message here
+                                firebaseAuth.signInWithEmailAndPassword(email,password);
+                                FirebaseUser user = firebaseAuth.getCurrentUser();
+                                User newUser = new User();
+                                databaseRef.child("Users").child(user.getUid()).setValue(newUser, new DatabaseReference.CompletionListener() {
+                                    @Override
+                                    public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+                                        if(databaseError == null){
+                                            Toast.makeText(SignupActivity.this, "Successfully updated", Toast.LENGTH_LONG).show();
+                                        }
+                                        else{
+                                            System.out.println("Error: "+ databaseError);
+                                            Toast.makeText(SignupActivity.this, "Unsuccessful...", Toast.LENGTH_LONG).show();
+                                        }
+                                    }
+                                });
+
                                 onSignupSuccess();
                             } else {
                                 //display some message here
                                 onSignupFailed();
+
                                 //Toast.makeText(MainActivity.this, "Registration Error", Toast.LENGTH_LONG).show();
                             }
                         }
                     });
         }
+
+//        public void saveUserInformation(String name, int BankDetails, String email, Boolean isParent) {
+//            //Getting values from database
+////            String name = editTextName.getText().toString().trim();
+////            int bankDetails = Integer.parseInt(editTextBankDetails.getText().toString());
+////            boolean isParent = checkBoxIsParent.isChecked();
+//
+//
+//            //creating a new user object
+//            User user = new User(name, bankDetails, currentUser.getEmail(), isParent);
+//
+////            System.out.println(user.toString());
+////            System.out.println(user.getName());
+////            System.out.println(user.getBankDetails());
+////            System.out.println(currentUser.getUid());
+//
+//            databaseReference.child("Users").child(currentUser.getUid()).setValue(user, new DatabaseReference.CompletionListener() {
+//                @Override
+//                public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+//                    if(databaseError == null){
+//                        Toast.makeText(CreateUserActivity.this, "Successfully updated", Toast.LENGTH_LONG).show();
+//                    }
+//                    else{
+//                        System.out.println("Error: "+ databaseError);
+//                        Toast.makeText(CreateUserActivity.this, "Unsuccessful...", Toast.LENGTH_LONG).show();
+//                    }
+//                }
+//            });
+        }
     }
-}
