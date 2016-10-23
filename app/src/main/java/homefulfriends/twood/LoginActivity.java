@@ -3,7 +3,9 @@ package homefulfriends.twood;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -11,23 +13,50 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+
 import butterknife.ButterKnife;
 import butterknife.Bind;
 
-public class LoginActivity extends AppCompatActivity {
+public abstract class LoginActivity extends AppCompatActivity implements View.OnClickListener{
     private static final String TAG = "LoginActivity";
     private static final int REQUEST_SIGNUP = 0;
 
+    //Objects and bind views
     @Bind(R.id.input_email) EditText _emailText;
     @Bind(R.id.input_password) EditText _passwordText;
     @Bind(R.id.btn_login) Button _loginButton;
     @Bind(R.id.link_signup) TextView _signupLink;
+
+    //firebase auth object
+    private FirebaseAuth firebaseAuth;
+
+    //progress dialog
+    private ProgressDialog progressDialog;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
+
+        //getting firebase auth object
+        firebaseAuth = FirebaseAuth.getInstance();
+
+        //if the objects getcurrentuser method is not null
+        //means user is already logged in redirect to parent page
+        if (firebaseAuth.getCurrentUser() != null){
+            //close this activity
+            finish();
+            System.out.println("User has already logged in");
+            //opening profile activity
+            startActivity(new Intent(getApplicationContext(), ParentMainActivity.class));
+        }
+
+
 
         _loginButton.setOnClickListener(new View.OnClickListener() {
 
@@ -68,6 +97,21 @@ public class LoginActivity extends AppCompatActivity {
         String password = _passwordText.getText().toString();
 
         // TODO: Implement your own authentication logic here.
+        firebaseAuth.signInWithEmailAndPassword(email, password)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        progressDialog.dismiss();
+                        if(task.isSuccessful()){
+                            //start the profile activity
+                            onLoginSuccess();
+                          }
+                        else {
+                            onLoginFailed();
+                        }
+                        progressDialog.dismiss();
+                    }
+                });
 
         new android.os.Handler().postDelayed(
                 new Runnable() {
@@ -75,7 +119,7 @@ public class LoginActivity extends AppCompatActivity {
                         // On complete call either onLoginSuccess or onLoginFailed
                         onLoginSuccess();
                         // onLoginFailed();
-                        progressDialog.dismiss();
+
                     }
                 }, 3000);
     }
@@ -101,7 +145,11 @@ public class LoginActivity extends AppCompatActivity {
 
     public void onLoginSuccess() {
         _loginButton.setEnabled(true);
+        System.out.println("Logged in!");
         finish();
+        //TODO: if parent, send to parentmainactivity. if child, send to childmainactivity
+        startActivity(new Intent(getApplicationContext(), ParentMainActivity.class));
+
     }
 
     public void onLoginFailed() {
@@ -131,5 +179,46 @@ public class LoginActivity extends AppCompatActivity {
         }
 
         return valid;
+    }
+
+    private void userLogin(){
+        String email = _emailText.getText().toString().trim();
+        String password  =_passwordText.getText().toString().trim();
+
+
+        //checking if email and passwords are empty
+        if(TextUtils.isEmpty(email)){
+            Toast.makeText(this,"Please enter email",Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        if(TextUtils.isEmpty(password)){
+            Toast.makeText(this,"Please enter password",Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        //if the email and password are not empty
+        //displaying a progress dialog
+
+        progressDialog.setMessage("Logging in Please Wait...");
+        progressDialog.show();
+
+        //logging in the user
+        firebaseAuth.signInWithEmailAndPassword(email, password)
+            .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                @Override
+                public void onComplete(@NonNull Task<AuthResult> task) {
+                    progressDialog.dismiss();
+                    //if the task is successful
+                    if(task.isSuccessful()){
+                        //start the profile activity
+                        finish();
+                        System.out.println("Logged in!");
+                        //TODO: if parent, send to parentmainactivity. if child, send to childmainactivity
+                        startActivity(new Intent(getApplicationContext(), ParentMainActivity.class));
+                    }
+                }
+            });
+
     }
 }
