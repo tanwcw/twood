@@ -21,7 +21,7 @@ public class TransferActivity extends AppCompatActivity {
         setContentView(R.layout.activity_transfer);
 //
 
-
+//
         //App Drawer
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);

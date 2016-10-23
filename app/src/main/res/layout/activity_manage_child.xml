@@ -7,5 +7,5 @@
     tools:context="homefulfriends.twood.ManageChildActivity">
 
     <include layout="@layout/toolbar"/>
-
+ 
  </RelativeLayout>

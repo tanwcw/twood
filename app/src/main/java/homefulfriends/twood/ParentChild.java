@@ -12,7 +12,7 @@ public class ParentChild {
         this.parentEmail = parentEmail;
         this.childEmail = childEmail;
     }
-
+//
     public String getParentEmail() {
         return parentEmail;
     }
