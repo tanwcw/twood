@@ -5,11 +5,10 @@
     android:id="@+id/activity_transfer"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="homefulfriends.twood.TransferActivity">
+    tools:context="homefulfriends.twood.DonationActivity">
 
-    <include layout="@layout/toolbar"/>
-
-
+    <include layout="@layout/toolbar"
+        android:id="@+id/include2" />
 
     <TextView
         android:text="How much would you like to transfer to"
@@ -33,7 +32,7 @@
         android:layout_centerHorizontal="true" />
 
     <TextView
-        android:text="child_name"
+        android:text="Charity_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/profile_image"
@@ -42,23 +41,29 @@
         android:id="@+id/child_name"
         android:textSize="36sp" />
 
-    <Button
-        android:text="Transfer"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/button2"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="27dp"
-        android:onClick="button2click" />
-
     <com.blackcat.currencyedittext.CurrencyEditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="35dp"
         android:layout_below="@+id/child_name"
-        android:layout_alignStart="@+id/child_name"
-        android:id="@+id/currencyEditText2" />
+        android:layout_alignEnd="@+id/child_name"
+        android:layout_alignStart="@+id/child_name" />
+
+    <Button
+        android:text="Transfer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/button2"
+        android:layout_marginBottom="20dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:text="You've donated $0.00 so far!"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView"
+        android:layout_above="@+id/button2"
+        android:layout_centerHorizontal="true" />
 
 </RelativeLayout>
-

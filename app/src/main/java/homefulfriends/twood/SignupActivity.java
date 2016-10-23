@@ -21,6 +21,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.concurrent.ExecutionException;
+
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
@@ -61,7 +63,11 @@ public class SignupActivity extends AppCompatActivity {
         _signupButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                signup();
+                try {
+                    signup();
+                } catch (Exception e){
+                    System.out.println(e);
+                }
             }
         });
 
@@ -77,7 +83,7 @@ public class SignupActivity extends AppCompatActivity {
         });
     }
 
-    public void signup() {
+    public void signup() throws InterruptedException, ExecutionException {
         Log.d(TAG, "Signup");
 
 
@@ -102,10 +108,12 @@ public class SignupActivity extends AppCompatActivity {
         String password = _passwordText.getText().toString();
         String reEnterPassword = _reEnterPasswordText.getText().toString();
 
+
+
         progressDialog.setMessage("Registering Please Wait...");
         progressDialog.show();
 
-        new signupRunnable(email, password, name, Integer.parseInt(mobile)).run();
+        new signupRunnable(email, password, name).run();
     }
 
     public void onSignupSuccess() {
@@ -183,14 +191,15 @@ public class SignupActivity extends AppCompatActivity {
         String email;
         String password;
         String name;
-        int phone;
 
-
+<<<<<<< HEAD
         public signupRunnable(String email, String password, String name, int phone) {
+=======
+        public signupRunnable(String email, String password, String name) {
+>>>>>>> e9c34fbc85ee7be018c6dec9cf955b02b216e3c7
             this.email = email;
             this.password = password;
             this.name = name;
-            this.phone = phone;
         }
 
         public void run() {
@@ -206,7 +215,11 @@ public class SignupActivity extends AppCompatActivity {
                                 //display some message here
                                 firebaseAuth.signInWithEmailAndPassword(email, password);
                                 FirebaseUser user = firebaseAuth.getCurrentUser();
+<<<<<<< HEAD
                                 User newUser = new User(name, phone, email);
+=======
+                                User newUser = new User();
+>>>>>>> e9c34fbc85ee7be018c6dec9cf955b02b216e3c7
                                 databaseRef.child("Users").child(user.getUid()).setValue(newUser, new DatabaseReference.CompletionListener() {
                                     @Override
                                     public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {

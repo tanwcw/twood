@@ -28,21 +28,24 @@ public class ParentMainActivity extends AppCompatActivity {
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle("Home");
-//cc//
+        getSupportActionBar().setTitle("Transfer money");
+
         //App Drawer
         PrimaryDrawerItem item1 = new PrimaryDrawerItem().withIdentifier(0).withName(R.string.drawer_item_home);
         SecondaryDrawerItem item2 = new SecondaryDrawerItem().withIdentifier(1).withName(R.string.drawer_item_transfer);
         SecondaryDrawerItem item3 = new SecondaryDrawerItem().withIdentifier(2).withName(R.string.drawer_item_see_child);
         SecondaryDrawerItem item4 = new SecondaryDrawerItem().withIdentifier(3).withName(R.string.drawer_item_settings);
         SecondaryDrawerItem item5 = new SecondaryDrawerItem().withIdentifier(4).withName(R.string.drawer_item_signout);
-       Drawer result = new DrawerBuilder()
+        SecondaryDrawerItem item6 = new SecondaryDrawerItem().withIdentifier(5).withName(R.string.drawer_item_add_child);
+
+
+        Drawer result = new DrawerBuilder()
                 .withActivity(this)
                 .withToolbar(toolbar)
                 .addDrawerItems(
                         item1,
                         new DividerDrawerItem(),
-                        item2,
+                        item2, //TODO: if parent has child, item2 else item5
                         item3,
                         new DividerDrawerItem(),
                         item4,
@@ -78,5 +81,15 @@ public class ParentMainActivity extends AppCompatActivity {
                     }
                 })
                 .build();
+    }
+
+
+    public boolean childExist(User user){
+        if(user.getChildKey().isEmpty()){
+            return false;
+        }
+        else
+            return true;
+
     }
 }
