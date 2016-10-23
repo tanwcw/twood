@@ -63,7 +63,11 @@ public class SignupActivity extends AppCompatActivity {
         _signupButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                signup();
+                try {
+                    signup();
+                } catch (Exception e){
+                    System.out.println(e);
+                }
             }
         });
 

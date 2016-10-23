@@ -36,13 +36,15 @@ public class ParentMainActivity extends AppCompatActivity {
         SecondaryDrawerItem item3 = new SecondaryDrawerItem().withIdentifier(2).withName(R.string.drawer_item_see_child);
         SecondaryDrawerItem item4 = new SecondaryDrawerItem().withIdentifier(3).withName(R.string.drawer_item_settings);
         SecondaryDrawerItem item5 = new SecondaryDrawerItem().withIdentifier(4).withName(R.string.drawer_item_signout);
-       Drawer result = new DrawerBuilder()
+        SecondaryDrawerItem item6 = new SecondaryDrawerItem().withIdentifier(5).withName(R.string.drawer_item_add_child);
+
+        Drawer result = new DrawerBuilder()
                 .withActivity(this)
                 .withToolbar(toolbar)
                 .addDrawerItems(
                         item1,
                         new DividerDrawerItem(),
-                        item2,
+                        item2, //TODO: if parent has child, item2 else item5
                         item3,
                         new DividerDrawerItem(),
                         item4,

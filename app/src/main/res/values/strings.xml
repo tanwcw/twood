@@ -11,6 +11,6 @@
     <string name="drawer_item_see_child">Manage Children</string>
     <string name="drawer_item_transfer">Transfer Money</string>
     <string name="drawer_item_signout">Sign Out</string>
-
+    <string name="drawer_item_add_child">Add Child</string>
 
 </resources>
