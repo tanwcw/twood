@@ -1,6 +1,7 @@
 package homefulfriends.twood;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -8,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -18,10 +20,10 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
-import butterknife.ButterKnife;
 import butterknife.Bind;
+import butterknife.ButterKnife;
 
-public abstract class LoginActivity extends AppCompatActivity implements View.OnClickListener{
+public class LoginActivity extends AppCompatActivity {
     private static final String TAG = "LoginActivity";
     private static final int REQUEST_SIGNUP = 0;
 
@@ -55,8 +57,6 @@ public abstract class LoginActivity extends AppCompatActivity implements View.On
             //opening profile activity
             startActivity(new Intent(getApplicationContext(), ParentMainActivity.class));
         }
-
-
 
         _loginButton.setOnClickListener(new View.OnClickListener() {
 
@@ -95,33 +95,35 @@ public abstract class LoginActivity extends AppCompatActivity implements View.On
 
         String email = _emailText.getText().toString();
         String password = _passwordText.getText().toString();
-
+        Boolean success = false;
         // TODO: Implement your own authentication logic here.
         firebaseAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         progressDialog.dismiss();
+                        System.out.println(task.isSuccessful());
                         if(task.isSuccessful()){
                             //start the profile activity
-                            onLoginSuccess();
-                          }
-                        else {
-                            onLoginFailed();
+                            new android.os.Handler().postDelayed(
+                                    new Runnable() {
+                                        public void run() {
+                                            onLoginSuccess();
+                                        }
+                                    }, 3000);
+                        } else {
+                            new android.os.Handler().postDelayed(
+                                    new Runnable() {
+                                        public void run() {
+                                             onLoginFailed();
+                                        }
+                                    }, 1000);
                         }
                         progressDialog.dismiss();
                     }
                 });
 
-        new android.os.Handler().postDelayed(
-                new Runnable() {
-                    public void run() {
-                        // On complete call either onLoginSuccess or onLoginFailed
-                        onLoginSuccess();
-                        // onLoginFailed();
 
-                    }
-                }, 3000);
     }
 
 
@@ -149,12 +151,15 @@ public abstract class LoginActivity extends AppCompatActivity implements View.On
         finish();
         //TODO: if parent, send to parentmainactivity. if child, send to childmainactivity
         startActivity(new Intent(getApplicationContext(), ParentMainActivity.class));
-
     }
 
     public void onLoginFailed() {
+        View view = this.getCurrentFocus();
+        if (view != null) {
+            InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
         Toast.makeText(getBaseContext(), "Login failed", Toast.LENGTH_LONG).show();
-
         _loginButton.setEnabled(true);
     }
 
@@ -212,13 +217,11 @@ public abstract class LoginActivity extends AppCompatActivity implements View.On
                     //if the task is successful
                     if(task.isSuccessful()){
                         //start the profile activity
-                        finish();
-                        System.out.println("Logged in!");
-                        //TODO: if parent, send to parentmainactivity. if child, send to childmainactivity
-                        startActivity(new Intent(getApplicationContext(), ParentMainActivity.class));
+                        onLoginSuccess();
+                    } else {
+                        onLoginFailed();
                     }
                 }
             });
-
     }
 }
